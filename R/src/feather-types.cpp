@@ -24,7 +24,11 @@ RColType toRColType(FeatherColType x) {
     return R_CHR;
   case PrimitiveType::BINARY:
     return R_RAW;
+  default:
+    stop("Unknown type");
+    return R_LGL;
   }
+
 };
 
 RColType toRColType(const ColumnPtr& x) {
@@ -39,6 +43,9 @@ RColType toRColType(const ColumnPtr& x) {
     return R_DATE;
   case feather::ColumnType::TIME:
     return R_TIME;
+  default:
+    stop("Unknown type");
+    return R_LGL;
   }
 }
 
@@ -53,6 +60,9 @@ std::string toString(RColType x) {
   case R_DATE:     return "date";
   case R_DATETIME: return "datetime";
   case R_TIME:     return "time";
+  default:
+    stop("Unknown type");
+    return "";
   }
 }
 
@@ -67,6 +77,9 @@ SEXPTYPE toSEXPTYPE(RColType x) {
   case R_DATE:     return INTSXP;
   case R_DATETIME: return REALSXP;
   case R_TIME:     return REALSXP;
+  default:
+    stop("Unknown type");
+    return LGLSXP;
   }
 }
 
@@ -173,6 +186,9 @@ int64_t timeScale(TimeUnit::type unit) {
   case TimeUnit::MILLISECOND: return 1e3;
   case TimeUnit::MICROSECOND: return 1e6;
   case TimeUnit::NANOSECOND:  return 1e9;
+  default:
+    stop("Unknown unit");
+    return 1;
   }
 }
 
@@ -266,6 +282,7 @@ SEXP toSEXP(const ColumnPtr& x) {
 
 
   }
+  default:
     stop("Not supported yet");
     return 0;
   }
